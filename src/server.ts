@@ -2,13 +2,15 @@
 import { ConnectionController } from './controllers/connection.controller';
 import { WebSocketServer } from 'ws';
 import { MessageHandler } from './message-handler';
+import { PlayerController } from './controllers/player.controller';
 
 export class WSServer {
   private wss: WebSocketServer;
 
   constructor(port: number) {
     const connectionController = new ConnectionController();
-    const messageHandler = new MessageHandler(connectionController);
+    const playerController = new PlayerController();
+    const messageHandler = new MessageHandler(connectionController, playerController);
 
     this.wss = new WebSocketServer({ port });
     this.wss.on('connection', (ws) => {

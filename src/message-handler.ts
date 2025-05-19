@@ -1,23 +1,39 @@
 import { WebSocket } from "ws";
 import { ConnectionController } from "./controllers/connection.controller";
-import { Player } from "./types";
+import { Player } from "./models/player";
+import { PlayerController } from "./controllers/player.controller";
+
 
 
 
 export class MessageHandler {
   private connectionController: ConnectionController;
+  private playerController: PlayerController;
 
-  constructor(connectionController: ConnectionController) {
+  constructor(connectionController: ConnectionController, playerController: PlayerController) {
     this.connectionController = connectionController;
+    this.playerController = playerController;
   }
 
   handle(ws: WebSocket, message: string) {
     console.log(`Received message: ${message}`);
     const data = JSON.parse(message.toString());
+    const bodyData = JSON.parse(data?.data || '{}');
     console.log('data', data);
+    console.log('bodyData', bodyData);
     switch (data.type) {
       case 'reg':
-        this.handleRegistration(ws, data.data);
+        this.handleRegistration(ws, bodyData);
+        break;
+
+      case "get_all_players":
+        console.log('Getting all players');
+        const players = this.playerController.getAllPlayers();
+        this.connectionController.sendTo(ws, {
+          type: 'all_players',
+          data: JSON.stringify(players),
+          id: 0,
+        });
         break;
 
       case 'create_room':
@@ -45,20 +61,41 @@ export class MessageHandler {
 
   handleRegistration(ws: WebSocket, data: Player) {
     console.log('Registering user:', data);
-    console.log('ws', ws);
     this.connectionController.setPlayer(ws, data);
-    const info = {
-        name: data.name,
-        index: 1,
-        error: false,
-        errorText: '',
-      }
-    ws.send(JSON.stringify({
-      type: 'reg',
-      data: JSON.stringify(info),
-      id: 0,
-    }));
-    console.log('Player registered:', data);
+    const { name, password } = data;
+
+    if (!name || !password) {
+      this.connectionController.sendTo(ws, {
+        type: 'reg',
+        data: { name, error: true, errorText: 'Missing name or password' },
+        id: 0,
+      });
+      return;
+    }
+
+    const existingPlayer = this.playerController.getPlayerByName(name);
+    let player: Player | null = null;
+
+    if (existingPlayer) {
+      player = this.playerController.login(data);
+    } else {
+      player = this.playerController.register(data);
+    }
+
+    if (player) {
+      this.connectionController.setPlayer(ws, player);
+      this.connectionController.sendTo(ws, {
+        type: 'reg',
+        data: JSON.stringify({ name: player.name, error: false }),
+        id: 0,
+      });
+    } else {
+      this.connectionController.sendTo(ws, {
+        type: 'reg',
+        data: JSON.stringify({ name, error: true, errorText: 'Registration failed' }),
+        id: 0,
+      });
+    }
   }
   handleCreateRoom(ws: WebSocket) {
     console.log('Creating room');

@@ -1,5 +1,4 @@
-export interface Player {
-  id: string;
+export interface PlayerData {
   name: string;
   password: string;
 }
