@@ -34,4 +34,17 @@ export class ConnectionController {
       }
     });
   }
+  sendToPlayer(player: Player, message: any) { 
+    const ws = this.getConnectionByPlayer(player);
+    if (ws && ws.readyState === WebSocket.OPEN) {
+      ws.send(JSON.stringify(message));
+    } else {
+      console.error('WebSocket is not open. Cannot send message.');
+    }
+  }
+
+  getConnectionByPlayer(player: Player): WebSocket | null {
+    const ws = Array.from(this.connections.entries()).find(([_, p]) => p?.index === player.index)?.[0];
+    return ws || null;
+  }
 }

@@ -11,7 +11,7 @@ export class WSServer {
   constructor(port: number) {
     const connectionController = new ConnectionController();
     const playerController = new PlayerController();
-    const roomController = new RoomController();
+    const roomController = new RoomController(connectionController);
     const messageHandler = new MessageHandler(connectionController, playerController, roomController);
 
     this.wss = new WebSocketServer({ port });
