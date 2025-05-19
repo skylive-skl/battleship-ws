@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": "src",
+    "baseUrl": "./",
     "forceConsistentCasingInFileNames": true,
     "allowSyntheticDefaultImports": true,
     "lib": ["ESNext"],
