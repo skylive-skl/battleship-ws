@@ -24,5 +24,10 @@ export class RoomController {
     return this.rooms.filter(r => this.availableRooms.has(r.roomId));
   }
 
+  getRoomById(roomId: string): Room | null {
+    const room = this.rooms.find(r => r.roomId === roomId);
+    return room || null;
+  }
+
 
 }

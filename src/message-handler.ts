@@ -41,7 +41,7 @@ export class MessageHandler {
         break;
 
       case 'add_user_to_room':
-        this.handleAddUserToRoom(ws, data.data);
+        this.handleAddUserToRoom(ws, bodyData);
         break;
 
       case 'add_ships':
@@ -109,18 +109,34 @@ export class MessageHandler {
     }
 
     this.roomController.createRoom(player);
-    // this.connectionController.sendTo(ws, {
-    //   type: 'create_room',
-    //   data: JSON.stringify({ roomId: room.id, error: false }),
-    //   id: 0,
-    // });
-
     this.broadcastUpdateRoom();
   }
 
-  handleAddUserToRoom(ws: WebSocket, data: any) {
-    console.log('Adding user to room:', data);
-    console.log('ws', ws);
+  handleAddUserToRoom(ws: WebSocket, data: { indexRoom: string }) {
+    const player = this.connectionController.getPlayer(ws);
+    if (!player) {
+      this.connectionController.sendTo(ws, {
+        type: 'add_user_to_room',
+        data: { error: true, errorText: 'Player not found' },
+        id: 0,
+      });
+      return;
+    }
+
+    const indexRoom = data.indexRoom;
+    const room = this.roomController.getRoomById(indexRoom);
+
+    if (!room) {
+      this.connectionController.sendTo(ws, {
+        type: 'add_user_to_room',
+        data: { error: true, errorText: 'Room not found' },
+        id: 0,
+      });
+      return;
+    }
+    this.roomController.joinRoom(player, indexRoom);
+    this.broadcastUpdateRoom();
+
   }
   handleAddShips(ws: WebSocket, data: any) {
     console.log('Adding ships:', data);
