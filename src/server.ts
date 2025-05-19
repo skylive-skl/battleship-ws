@@ -1,12 +1,15 @@
 
 import { ConnectionController } from './controllers/connection.controller';
 import { WebSocketServer } from 'ws';
+import { MessageHandler } from './message-handler';
 
 export class WSServer {
   private wss: WebSocketServer;
 
   constructor(port: number) {
     const connectionController = new ConnectionController();
+    const messageHandler = new MessageHandler(connectionController);
+
     this.wss = new WebSocketServer({ port });
     this.wss.on('connection', (ws) => {
       console.log('New client connected');
@@ -15,6 +18,7 @@ export class WSServer {
         console.log(`Received message: ${message}`);
         const data = JSON.parse(message.toString());
         console.log('data', data);
+        messageHandler.handle(ws, message.toString());
         console.log('connectionController', connectionController);
       });
       ws.on('close', () => {
