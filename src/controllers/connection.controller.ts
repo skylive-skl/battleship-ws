@@ -1,4 +1,4 @@
-import { Player } from 'src/models/player';
+import { Player } from '../models/player';
 import { WebSocket } from 'ws'; 
 
 export class ConnectionController {
@@ -26,5 +26,12 @@ export class ConnectionController {
     } else {
       console.error('WebSocket is not open. Cannot send message.');
     }
+  }
+  sendToAll(message: any) {
+    this.connections.forEach((_, ws) => {
+      if (ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify(message));
+      }
+    });
   }
 }

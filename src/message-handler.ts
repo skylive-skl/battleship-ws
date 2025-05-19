@@ -2,17 +2,17 @@ import { WebSocket } from "ws";
 import { ConnectionController } from "./controllers/connection.controller";
 import { Player } from "./models/player";
 import { PlayerController } from "./controllers/player.controller";
-
-
-
+import { RoomController } from "./controllers/room.controller";
 
 export class MessageHandler {
   private connectionController: ConnectionController;
   private playerController: PlayerController;
+  private roomController: RoomController;
 
-  constructor(connectionController: ConnectionController, playerController: PlayerController) {
+  constructor(connectionController: ConnectionController, playerController: PlayerController, roomController: RoomController) {
     this.connectionController = connectionController;
     this.playerController = playerController;
+    this.roomController = roomController;
   }
 
   handle(ws: WebSocket, message: string) {
@@ -98,8 +98,24 @@ export class MessageHandler {
     }
   }
   handleCreateRoom(ws: WebSocket) {
-    console.log('Creating room');
-    console.log('ws', ws);
+    const player = this.connectionController.getPlayer(ws);
+    if (!player) {
+      this.connectionController.sendTo(ws, {
+        type: 'create_room',
+        data: { error: true, errorText: 'Player not found' },
+        id: 0,
+      });
+      return;
+    }
+
+    this.roomController.createRoom(player);
+    // this.connectionController.sendTo(ws, {
+    //   type: 'create_room',
+    //   data: JSON.stringify({ roomId: room.id, error: false }),
+    //   id: 0,
+    // });
+
+    this.broadcastUpdateRoom();
   }
 
   handleAddUserToRoom(ws: WebSocket, data: any) {
@@ -113,5 +129,15 @@ export class MessageHandler {
   handleAttack(ws: WebSocket, data: any) {
     console.log('Attacking:', data);
     console.log('ws', ws);
+  }
+
+  private broadcastUpdateRoom() {
+    const rooms = this.roomController.getAvailableRooms();
+
+    this.connectionController.sendToAll({
+      type: 'update_room',
+      data: JSON.stringify(rooms),
+      id: 0,
+    });
   }
 }

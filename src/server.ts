@@ -3,6 +3,7 @@ import { ConnectionController } from './controllers/connection.controller';
 import { WebSocketServer } from 'ws';
 import { MessageHandler } from './message-handler';
 import { PlayerController } from './controllers/player.controller';
+import { RoomController } from './controllers/room.controller';
 
 export class WSServer {
   private wss: WebSocketServer;
@@ -10,7 +11,8 @@ export class WSServer {
   constructor(port: number) {
     const connectionController = new ConnectionController();
     const playerController = new PlayerController();
-    const messageHandler = new MessageHandler(connectionController, playerController);
+    const roomController = new RoomController();
+    const messageHandler = new MessageHandler(connectionController, playerController, roomController);
 
     this.wss = new WebSocketServer({ port });
     this.wss.on('connection', (ws) => {
