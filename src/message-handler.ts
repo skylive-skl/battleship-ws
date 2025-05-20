@@ -3,6 +3,7 @@ import { ConnectionController } from "./controllers/connection.controller";
 import { Player } from "./models/player";
 import { PlayerController } from "./controllers/player.controller";
 import { RoomController } from "./controllers/room.controller";
+import { Ship } from "./types";
 
 export class MessageHandler {
   private connectionController: ConnectionController;
@@ -138,9 +139,15 @@ export class MessageHandler {
     this.broadcastUpdateRoom();
 
   }
-  handleAddShips(ws: WebSocket, data: any) {
-    console.log('Adding ships:', data);
-    console.log('ws', ws);
+  handleAddShips(ws: WebSocket, data: {
+    gameId: string,
+    ships: Ship[]
+    index: number,
+  }) {
+     
+    
+    
+
   }
   handleAttack(ws: WebSocket, data: any) {
     console.log('Attacking:', data);
