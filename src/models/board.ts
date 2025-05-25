@@ -1,8 +1,4 @@
-// src/game/board.ts
-
-import { CellState } from '../types';
-import { Position } from '../types';
-import { Ship } from '../types';
+import type { CellState, Position, Ship } from '../types';
 
 export class Board {
   private field: CellState[][] = Array.from({ length: 10 }, () => Array(10).fill('empty'));

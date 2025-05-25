@@ -1,7 +1,4 @@
-
 import { v4 as uuidv4 } from 'uuid';
-
-
 export class Player {
   public index: string;
   public idInGame: string | null = null;

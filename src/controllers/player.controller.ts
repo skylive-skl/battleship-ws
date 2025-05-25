@@ -1,5 +1,5 @@
 import { Player } from "../models/player";
-import { PlayerData } from "../types";
+import type { PlayerData } from "../types";
 
 export class PlayerController {
   private players: Map<string, Player> = new Map();

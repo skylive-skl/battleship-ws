@@ -1,5 +1,3 @@
-
-
 import { v4 as uuidv4 } from 'uuid';
 import { Player } from './player';
 export class Game {

@@ -1,5 +1,6 @@
+ 
 import { startWSServer } from "./src/server";
-import { httpServer } from "./src/http_server";
+import { httpServer } from "./src/http_server/index";
 
 import { config } from 'dotenv';
 

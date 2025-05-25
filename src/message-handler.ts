@@ -3,7 +3,7 @@ import { ConnectionController } from "./controllers/connection.controller";
 import { Player } from "./models/player";
 import { PlayerController } from "./controllers/player.controller";
 import { RoomController } from "./controllers/room.controller";
-import { Ship } from "./types";
+import type { Ship } from "./types";
 
 export class MessageHandler {
   private connectionController: ConnectionController;
@@ -144,10 +144,8 @@ export class MessageHandler {
     ships: Ship[]
     index: number,
   }) {
-     
-    
-    
-
+    console.log('Adding ships:', data);
+    console.log('ws', ws);
   }
   handleAttack(ws: WebSocket, data: any) {
     console.log('Attacking:', data);

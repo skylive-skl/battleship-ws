@@ -16,8 +16,13 @@
     "strict": true,
     "strictPropertyInitialization": false,
     "esModuleInterop": true,
-    "moduleResolution": "Node",
+    "moduleResolution": "bundler",
     "module": "ESNext",
-    "target": "ESNext"
-  }
+    "target": "ESNext",
+    "paths": {
+      "*": ["*"]
+    },
+    "verbatimModuleSyntax": true
+  },
+  "include": ["src"]
 }
