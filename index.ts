@@ -1,6 +1,6 @@
  
-import { startWSServer } from "./src/server";
-import { httpServer } from "./src/http_server/index";
+import { startWSServer } from "./src/server.js";
+import { httpServer } from "./src/http_server/index.js";
 
 import { config } from 'dotenv';
 

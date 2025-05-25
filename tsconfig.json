@@ -19,10 +19,6 @@
     "moduleResolution": "bundler",
     "module": "ESNext",
     "target": "ESNext",
-    "paths": {
-      "*": ["*"]
-    },
     "verbatimModuleSyntax": true
   },
-  "include": ["src"]
 }

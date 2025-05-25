@@ -1,9 +1,9 @@
 
-import { ConnectionController } from './controllers/connection.controller';
+import { ConnectionController } from './controllers/connection.controller.js';
 import { WebSocketServer } from 'ws';
-import { MessageHandler } from './message-handler';
-import { PlayerController } from './controllers/player.controller';
-import { RoomController } from './controllers/room.controller';
+import { MessageHandler } from './message-handler.js';
+import { PlayerController } from './controllers/player.controller.js';
+import { RoomController } from './controllers/room.controller.js';
 
 export class WSServer {
   private wss: WebSocketServer;

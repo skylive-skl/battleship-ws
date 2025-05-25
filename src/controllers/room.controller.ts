@@ -1,6 +1,6 @@
-import { Player } from "../models/player";
-import { Room } from "../models/room";
-import { ConnectionController } from "./connection.controller";
+import { Player } from "../models/player.js";
+import { Room } from "../models/room.js";
+import { ConnectionController } from "./connection.controller.js";
 
 export class RoomController {
   private rooms: Room[] = [];

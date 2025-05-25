@@ -1,4 +1,4 @@
-import { Player } from "../models/player";
+import { Player } from "../models/player.js";
 import type { PlayerData } from "../types";
 
 export class PlayerController {

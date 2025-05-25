@@ -1,8 +1,8 @@
 import { WebSocket } from "ws";
-import { ConnectionController } from "./controllers/connection.controller";
-import { Player } from "./models/player";
-import { PlayerController } from "./controllers/player.controller";
-import { RoomController } from "./controllers/room.controller";
+import { ConnectionController } from "./controllers/connection.controller.js";
+import { Player } from "./models/player.js";
+import { PlayerController } from "./controllers/player.controller.js";
+import { RoomController } from "./controllers/room.controller.js";
 import type { Ship } from "./types";
 
 export class MessageHandler {

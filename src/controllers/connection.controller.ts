@@ -1,4 +1,4 @@
-import { Player } from '../models/player';
+import { Player } from '../models/player.js';
 import { WebSocket } from 'ws'; 
 
 export class ConnectionController {

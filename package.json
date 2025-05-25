@@ -7,7 +7,7 @@
   "scripts": {
     "start": "npm run start:dev",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc && tsc-alias",
+    "build": "tsc",
     "start:dev": "nodemon --exec node --loader ts-node/esm --experimental-specifier-resolution=node ./index.ts",
     "start:prod": "npm run build && node dist/index.js"
   },
@@ -27,7 +27,6 @@
     "prettier": "^3.2.5",
     "ts-loader": "^9.5.1",
     "ts-node": "^10.9.2",
-    "tsc-alias": "^1.8.16",
     "typescript": "^5.3.3"
   },
   "dependencies": {

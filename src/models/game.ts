@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import { Player } from './player';
+import { Player } from './player.js';
 export class Game {
 
   players: Player[] = [];
