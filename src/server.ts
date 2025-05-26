@@ -1,0 +1,38 @@
+
+import { ConnectionController } from './controllers/connection.controller.js';
+import { WebSocketServer } from 'ws';
+import { MessageHandler } from './message-handler.js';
+import { PlayerController } from './controllers/player.controller.js';
+import { RoomController } from './controllers/room.controller.js';
+
+export class WSServer {
+  private wss: WebSocketServer;
+
+  constructor(port: number) {
+    const connectionController = new ConnectionController();
+    const playerController = new PlayerController();
+    const roomController = new RoomController(connectionController);
+    const messageHandler = new MessageHandler(connectionController, playerController, roomController);
+
+    this.wss = new WebSocketServer({ port });
+    this.wss.on('connection', (ws) => {
+      console.log('New client connected');
+      connectionController.addConnection(ws);
+      ws.on('message', (message) => {
+        console.log(`Received message: ${message}`);
+        const data = JSON.parse(message.toString());
+        console.log('data', data);
+        messageHandler.handle(ws, message.toString());
+        console.log('connectionController', connectionController);
+      });
+      ws.on('close', () => {
+        console.log('Client disconnected');
+        connectionController.removeConnection(ws);
+      });
+    });
+    console.log(`WebSocket server is running on ws://localhost:${port}`);
+  }
+}
+export const startWSServer = (port: number) => {
+  return new WSServer(port);
+};
